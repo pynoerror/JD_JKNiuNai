@@ -13,22 +13,21 @@ class JKNNSpider(scrapy.Spider):
         'User-Agent': 'Mozilla / 5.0(Windows NT 10.0;WOW64) AppleWebKit/537.36(KHTML, likeGecko)Chrome / 69.0.3497.100Safari / 537.36'
     }
 
+    # 获取评论数
     def get_comment(self,response):
         item = response.meta["item"]
-
-        js = json.loads(str(response.text))
-        item['commentcount'] = js['CommentsCount'][0]['CommentCountStr']#全部评论数
-        item['videocount'] = js['CommentsCount'][0]['VideoCountStr']#视频晒单
-        item['aftercount'] = js['CommentsCount'][0]['AfterCountStr']#追评
-        item['goodcount'] = js['CommentsCount'][0]['GoodCountStr']#好评
-        item['generalcount'] = js['CommentsCount'][0]['GeneralCountStr']#中评
-        item['poorcount'] = js['CommentsCount'][0]['PoorCountStr']#差评
+        js = json.loads(str(response.text)) #json转字典
+        item['commentcount'] = js['CommentsCount'][0]['CommentCountStr']    #全部评论数
+        item['videocount'] = js['CommentsCount'][0]['VideoCountStr']    #视频晒单
+        item['aftercount'] = js['CommentsCount'][0]['AfterCountStr']    #追评
+        item['goodcount'] = js['CommentsCount'][0]['GoodCountStr']  #好评
+        item['generalcount'] = js['CommentsCount'][0]['GeneralCountStr']    #中评
+        item['poorcount'] = js['CommentsCount'][0]['PoorCountStr']  #差评
         yield item
 
-
+    #爬取第一页展示的商品：
     def parse(self, response):
         goods = response.css("#J_goodsList ul li.gl-item")
-        #这里获取的商品是吗
         for good in goods:
             item = JKNiuNaiItem()
             item["id"] = good.css("::attr(data-sku)").extract()[0]

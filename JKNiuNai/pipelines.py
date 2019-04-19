@@ -7,11 +7,12 @@
 from openpyxl import Workbook
 
 class JkniunaiPipeline(object):
-
+    #以excle保存数据
     wd = Workbook()
     ws = wd.active
     ws.append(["商品ID","商品名称","店铺名称","商品链接","商品价格","会员价格","全部评论数","视频晒单","追评","好评","中评","差评"])
     def process_item(self, item, spider):
+        #处理成excel能直接保存的字符串
         for key, value in item.items():
             if value == []:
                 item[key] = ""
